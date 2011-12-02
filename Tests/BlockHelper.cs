@@ -19,6 +19,18 @@ namespace Tests
 
         public class MockBlock : IBlock
         {
+            public int Width { get; private set; }
+            public int Height { get; private set; }
+
+            public MockBlock()
+            {
+            }
+
+            public MockBlock(int width, int height)
+            {
+                this.Width = width;
+                this.Height = height;
+            }
 
             public void RotateLeft()
             {
@@ -30,7 +42,7 @@ namespace Tests
                 throw new NotImplementedException();
             }
 
-            public Color? ColorAt(int x, int y)
+            public Color? ColorAt(Vector2 position)
             {
                 throw new NotImplementedException();
             }

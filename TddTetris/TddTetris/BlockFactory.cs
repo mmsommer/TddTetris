@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Microsoft.Xna.Framework;
 
 namespace TddTetris
 {
@@ -9,7 +10,12 @@ namespace TddTetris
     {
         public IBlock MakeBlock()
         {
-            return new Block();
+            bool[,] blockShape = new bool[,] {
+                {true, false },
+                {true, true },
+                {false, true} };
+
+            return new Block( blockShape, Color.White );
         }
     }
 }

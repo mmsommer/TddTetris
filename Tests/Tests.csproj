@@ -57,6 +57,7 @@
   <ItemGroup>
     <Compile Include="BlockFactory_MakeBlockTest.cs" />
     <Compile Include="BlockHelper.cs" />
+    <Compile Include="BlockTest.cs" />
     <Compile Include="FieldTest.cs" />
     <Compile Include="GameMechanics_AdvanceIfPossible.cs" />
     <Compile Include="GameMechanics_HandleInputTest.cs" />

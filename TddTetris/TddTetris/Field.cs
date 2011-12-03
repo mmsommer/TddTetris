@@ -34,7 +34,15 @@ namespace TddTetris
                 throw new IndexOutOfRangeException();
             }
 
-            if (Block != null && (x >= Position.X && x < Position.X + Block.Width && y >= Position.Y && y < Position.Y + Block.Height ))
+            return GetColorInBlock(position);
+        }
+
+        private Color? GetColorInBlock(Vector2 position)
+        {
+            int x = (int)position.X;
+            int y = (int)position.Y;
+
+            if (Block != null && (x >= Position.X && x < Position.X + Block.Width && y >= Position.Y && y < Position.Y + Block.Height))
             {
                 Vector2 resultingPosition = position - Position;
 

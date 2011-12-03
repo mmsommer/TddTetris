@@ -11,15 +11,15 @@ namespace Tests
     [TestFixture]
     public class BlockTest
     {
-        private bool[,] blockValues;
+        private List<bool[,]> blockValues;
         private Color blockColor = Color.White;
 
         [SetUp]
         public void SetUp()
         {
-            this.blockValues = new bool[,] {
+            this.blockValues = new List<bool[,]> { new bool[,] {
               { false, true },
-              { false, true } };
+              { false, true } }};
         }
 
         [Test]
@@ -47,7 +47,7 @@ namespace Tests
         [Test]
         public void TestWidth_ShouldReturnBlockWidth()
         {
-            bool[,] blockValues = new bool[2,4];
+            List<bool[,]> blockValues = new List<bool[,]> { new bool[2, 4] };
 
             Block block = new Block(blockValues, Color.White);
 
@@ -57,7 +57,7 @@ namespace Tests
         [Test]
         public void TestHeight_ShouldReturnBlockHeight()
         {
-            bool[,] blockValues = new bool[2, 4];
+            List<bool[,]> blockValues = new List<bool[,]> { new bool [2, 4] };
 
             Block block = new Block(blockValues, Color.White);
 

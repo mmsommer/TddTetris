@@ -11,17 +11,20 @@ namespace TddTetris
         public int Width { get; private set; }
         public int Height { get; private set; }
 
-        private readonly bool[,] values;
+        private readonly List<bool[,]> shapes;
+        private int currentShape;
 
         private readonly Color color;
 
-        public Block( bool[,] values, Color color )
+        public Block( List<bool[,]> shapes, Color color )
         {
-            this.values = values;
+            this.shapes = shapes;
             this.color = color;
 
-            this.Width = values.GetLength(1);
-            this.Height = values.GetLength(0);
+            this.Width = shapes[0].GetLength(1);
+            this.Height = shapes[0].GetLength(0);
+
+            this.currentShape = 0;
         }
 
         public void RotateLeft()
@@ -36,7 +39,7 @@ namespace TddTetris
 
         public Color? ColorAt(Vector2 position)
         {
-            bool present = this.values[(int)position.Y, (int)position.X];
+            bool present = this.shapes[currentShape][(int)position.Y, (int)position.X];
 
             if (present)
             {

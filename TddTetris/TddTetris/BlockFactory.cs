@@ -15,7 +15,7 @@ namespace TddTetris
                 {true, true },
                 {false, true} };
 
-            return new Block( blockShape, Color.White );
+            return new Block( new List<bool[,]> { blockShape } , Color.White );
         }
     }
 }

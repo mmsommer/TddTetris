@@ -79,13 +79,6 @@ namespace Tests
         }
 
         [Test]
-        public void Test_FixBlock_ShouldDoNothing()
-        {
-            Field subject = new Field(10, 10);
-            subject.FixBlock();
-        }
-
-        [Test]
         public void Test_CanMoveLeft_WhenNotAtTheLeftEdge_ReturnsTrue()
         {
             Field subject = new Field(10, 10);
@@ -122,6 +115,5 @@ namespace Tests
         }
 
         #endregion
-
     }
 }

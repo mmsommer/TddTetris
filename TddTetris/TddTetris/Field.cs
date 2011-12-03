@@ -8,6 +8,8 @@ namespace TddTetris
 {
     public class Field : IField
     {
+        private Color?[,] field;
+
         public int Width { get; private set; }
         public int Height { get; private set; }
 
@@ -18,6 +20,8 @@ namespace TddTetris
         {
             this.Width = width;
             this.Height = height;
+
+            this.field = new Color?[width, height];
         }
 
         public Color? ColorAt(Vector2 position)
@@ -39,7 +43,7 @@ namespace TddTetris
             }
             else
             {
-                return null;
+                return field[x, y];
             }
         }
 
@@ -81,6 +85,18 @@ namespace TddTetris
 
         public void FixBlock()
         {
+            for (int x = 0; x < Block.Width; x++)
+            {
+                for (int y = 0; y < Block.Height; y++)
+                {
+                    Color? color = Block.ColorAt(new Vector2(x, y));
+
+                    if (color.HasValue)
+                    {
+                        field[(int)Position.X + x, (int)Position.Y + y] = color;
+                    }
+                }
+            }
         }
     }
 }

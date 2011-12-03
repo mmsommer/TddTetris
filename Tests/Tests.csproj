@@ -60,6 +60,7 @@
     <Compile Include="BlockTest.cs" />
     <Compile Include="FieldTest.cs" />
     <Compile Include="Field_ColorAtTest.cs" />
+    <Compile Include="Field_FixBlockTest.cs" />
     <Compile Include="GameMechanics_AdvanceIfPossible.cs" />
     <Compile Include="GameMechanics_HandleInputTest.cs" />
     <Compile Include="GameMechanics_MoveLeftIfPossible.cs" />

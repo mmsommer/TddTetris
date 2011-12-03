@@ -5,6 +5,7 @@ using System.Text;
 using NUnit.Framework;
 using TddTetris;
 using Microsoft.Xna.Framework;
+using Moq;
 
 namespace Tests
 {
@@ -12,27 +13,6 @@ namespace Tests
     public class FieldTest
     {
         private static IBlock UNUSED_BLOCK = null;
-
-        #region Temporary tests until real block mapping is implemented
-        [Test]
-        public void Test_ColorAt_NullIfNotBlockPosition()
-        {
-            Field subject = new Field(2, 2);
-            subject.SetBlock(null, new Vector2(1, 1));
-
-            Assert.IsNull( subject.ColorAt(new Vector2(0,0)) );
-        }
-
-        [Test]
-        public void Test_ColorAt_WhiteIfBlockPosition()
-        {
-            Vector2 position = new Vector2(1, 1);
-            Field subject = new Field(2, 2);
-            subject.SetBlock(null, position);
-
-            Assert.AreEqual(Color.White, subject.ColorAt(position));
-        }
-        #endregion
 
         [Test]
         public void Test_ColorAt_OutOfBounds_RaisesException()
@@ -53,7 +33,7 @@ namespace Tests
         public void Test_SetBlock()
         {
             Field subject = new Field(10, 10);
-            IBlock block = new BlockHelper.MockBlock();
+            IBlock block = new BlockHelper.MockBlock(4, 4);
             Vector2 position = new Vector2(2, 3);
 
             subject.SetBlock(block, position);
@@ -93,6 +73,38 @@ namespace Tests
 
             Assert.AreEqual(new Vector2(4, 4), subject.Position);
         }
+
+        [Test]
+        public void Test_ColorAt_WhenBlockIsNull_ReturnsNull()
+        {
+            Field subject = new Field(10, 10);
+            Assert.IsNull(subject.ColorAt(new Vector2(3, 3)));
+        }
+
+        [Test]
+        public void Test_ColorAt_WhenNoBlockIsThere_ReturnsNull()
+        {
+            Field subject = new Field(10, 10);
+            subject.SetBlock(new BlockHelper.MockBlock(), new Vector2(3, 4));
+
+            Assert.IsNull(subject.ColorAt(new Vector2(3, 3)));
+        }
+
+        [Test]
+        public void Test_ColorAt_WhenBlockIsThere_ReturnsBlockColorAt()
+        {
+            Field subject = new Field(10, 10);
+
+            Mock<IBlock> block = new Mock<IBlock>();
+            block.Setup(b => b.ColorAt(new Vector2(1, 2))).Returns(Color.White);
+            block.Setup(b => b.Width).Returns(2);
+            block.Setup(b => b.Height).Returns(3);
+            subject.SetBlock(block.Object, new Vector2(4, 4));
+
+            Color? result = subject.ColorAt(new Vector2(5, 6));
+            Assert.AreEqual(Color.White, result.Value);
+        }
+
 
         #region Temporary tests until real behaviour is implemented
         [Test]

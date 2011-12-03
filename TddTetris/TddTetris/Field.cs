@@ -22,20 +22,25 @@ namespace TddTetris
 
         public Color? ColorAt(Vector2 position)
         {
-            float x = position.X;
-            float y = position.Y;
+            int x = (int)position.X;
+            int y = (int)position.Y;
 
             if (x < 0 || x >= Width || y < 0 || y >= Height)
             {
                 throw new IndexOutOfRangeException();
             }
 
-            if (position == Position)
+            if (Block != null && (x >= Position.X && x < Position.X + Block.Width && y >= Position.Y && y < Position.Y + Block.Height ))
             {
-                return Color.White;
-            }
+                Vector2 resultingPosition = position - Position;
 
-            return null;
+                Color? result = Block.ColorAt(resultingPosition);
+                return result;
+            }
+            else
+            {
+                return null;
+            }
         }
 
         public void SetBlock(IBlock block, Vector2 position)

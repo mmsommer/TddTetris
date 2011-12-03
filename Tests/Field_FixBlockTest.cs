@@ -40,10 +40,13 @@ namespace Tests
         [Test]
         public void Test_FixBlock_DoesNotSetMissingColors()
         {
-            // First set some colors at the position where the block will be fixed
-            IBlock fullBlock = new MockBlockImage(new bool[,] { { true, true }, { true, true } });
-            subject.SetBlock(fullBlock, position);
-            subject.FixBlock();
+            Color white = Color.White;
+
+            subject.SetContentsForTest( new Color?[,]
+            { { null, null,  null,  null},
+              { null, white, white, null },
+              { null, white, white, null },
+              { null, null,  null,  null} });
 
             subject.SetBlock(block, position);
             subject.FixBlock();

@@ -98,5 +98,14 @@ namespace TddTetris
                 }
             }
         }
+
+        /* This is a helper method so we don't have to fix / remove blocks every time we
+         * want to pre-fill the Field. The method name implies that this should only be used
+         * for tests.
+         */
+        public void SetContentsForTest(Color?[,] field)
+        {
+            this.field = field;
+        }
     }
 }

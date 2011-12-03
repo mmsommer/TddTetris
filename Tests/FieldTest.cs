@@ -59,6 +59,21 @@ namespace Tests
             Assert.AreEqual(new Vector2(4, 4), subject.Position);
         }
 
+        [Test]
+        public void Test_SetContentsForTest()
+        {
+            Field subject = new Field(2, 2);
+
+            subject.SetContentsForTest( new Color?[,] {
+                { Color.Red, null },
+                { null, Color.Blue } });
+
+            Assert.AreEqual(Color.Red, subject.ColorAt(new Vector2(0, 0) ));
+            Assert.AreEqual(Color.Blue, subject.ColorAt(new Vector2(1, 1) ));
+            Assert.IsNull(subject.ColorAt(new Vector2(0, 1) ));
+            Assert.IsNull(subject.ColorAt(new Vector2(1, 0) ));
+        }
+
         #region Temporary tests until real behaviour is implemented
         [Test]
         public void Test_CanAdvance_WhenNotAtTheBottom_ReturnsTrue()

@@ -65,6 +65,7 @@
     <Compile Include="GameMechanics_HandleInputTest.cs" />
     <Compile Include="GameMechanics_MoveLeftIfPossible.cs" />
     <Compile Include="GameMechanics_MoveRightIfPossible.cs" />
+    <Compile Include="GameMechanics_NextBlock.cs" />
     <Compile Include="InputQueueTest.cs" />
     <Compile Include="TestRunner.cs" />
   </ItemGroup>

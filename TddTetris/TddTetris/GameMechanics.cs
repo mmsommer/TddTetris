@@ -46,8 +46,13 @@ namespace TddTetris
             else
             {
                 field.FixBlock();
-                field.SetBlock( blockFactory.MakeBlock(), new Vector2(field.Width / 2, 0) );
+                NextBlock();
             }
+        }
+
+        public void NextBlock()
+        {
+            field.SetBlock(blockFactory.MakeBlock(), new Vector2(field.Width / 2, 0));
         }
 
         public void MoveLeftIfPossible()

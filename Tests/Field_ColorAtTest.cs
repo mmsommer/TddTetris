@@ -42,7 +42,7 @@ namespace Tests
         }
 
         [Test]
-        public void Test_ColorAt_WhenBlockIsThere_ReturnsBlockColorAt()
+        public void Test_ColorAt_WhenBlockIsThereWithColor_ReturnsBlockColorAt()
         {
             Field subject = new Field(10, 10);
 
@@ -53,6 +53,31 @@ namespace Tests
             subject.SetBlock(block.Object, new Vector2(4, 4));
 
             Color? result = subject.ColorAt(new Vector2(5, 6));
+            Assert.AreEqual(Color.White, result.Value);
+        }
+
+        [Test]
+        public void Test_ColorAt_WhenBlockIsThereAndNoColor_ItReturnsFieldColorAt()
+        {
+            Field subject = new Field(4, 4);
+            Color white = Color.White;
+
+            subject.SetContentsForTest(new Color?[,]
+            { { null, null,  null,  null},
+              { null, white, white, null },
+              { null, white, white, null },
+              { null, null,  null,  null} });
+
+            Mock<IBlock> block = new Mock<IBlock>();
+            Color? nullColor = null;
+
+            block.Setup(b => b.Width).Returns(2);
+            block.Setup(b => b.Height).Returns(2);
+            block.Setup(b => b.ColorAt(new Vector2(0, 1))).Returns(nullColor);
+
+            subject.SetBlock(block.Object, new Vector2(1, 1));
+
+            Color? result = subject.ColorAt(new Vector2(1, 2));
             Assert.AreEqual(Color.White, result.Value);
         }
     }

@@ -42,11 +42,16 @@ namespace TddTetris
             int x = (int)position.X;
             int y = (int)position.Y;
 
+            Color? result = null;
             if (Block != null && (x >= Position.X && x < Position.X + Block.Width && y >= Position.Y && y < Position.Y + Block.Height))
             {
                 Vector2 resultingPosition = position - Position;
 
-                Color? result = Block.ColorAt(resultingPosition);
+                result = Block.ColorAt(resultingPosition);
+            }
+
+            if (result.HasValue)
+            {
                 return result;
             }
             else

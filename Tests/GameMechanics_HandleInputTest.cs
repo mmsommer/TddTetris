@@ -68,5 +68,24 @@ namespace Tests
             currentSubject.HandleInput(input);
             currentField.Verify(f => f.FixBlock());
         }
+
+        [Test]
+        public void Test_HandleInput_WhenUpIsPressed()
+        {
+            Mock<IBlock> currentBlock = new Mock<IBlock>();
+
+            Mock<IBlockFactory> factory = new Mock<IBlockFactory>();
+            factory.Setup(f => f.MakeBlock()).Returns(currentBlock.Object);
+
+            Mock<IField> field = new Mock<IField>();
+
+            GameMechanics currentSubject = new GameMechanics(field.Object, factory.Object);
+            currentSubject.NextBlock();
+
+            List<Keys> input = new List<Keys> { Keys.Up };
+
+            currentSubject.HandleInput(input);
+            currentBlock.Verify(b => b.RotateRight());
+        }
     }
 }

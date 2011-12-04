@@ -8,8 +8,8 @@ namespace TddTetris
 {
     public class Block : IBlock
     {
-        public int Width { get; private set; }
-        public int Height { get; private set; }
+        public int Width { get { return shapes[currentShape].GetLength(1); } }
+        public int Height { get { return shapes[currentShape].GetLength(0); } }
 
         private readonly List<bool[,]> shapes;
         private int currentShape;
@@ -21,20 +21,22 @@ namespace TddTetris
             this.shapes = shapes;
             this.color = color;
 
-            this.Width = shapes[0].GetLength(1);
-            this.Height = shapes[0].GetLength(0);
-
             this.currentShape = 0;
         }
 
         public void RotateLeft()
         {
-            throw new NotImplementedException();
+            this.currentShape--;
+
+            if (this.currentShape < 0)
+                this.currentShape = this.shapes.Count - 1;
         }
 
         public void RotateRight()
         {
-            throw new NotImplementedException();
+            this.currentShape++;
+
+            this.currentShape = this.currentShape % shapes.Count;
         }
 
         public Color? ColorAt(Vector2 position)

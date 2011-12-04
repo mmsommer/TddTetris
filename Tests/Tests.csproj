@@ -58,6 +58,7 @@
     <Compile Include="BlockFactory_MakeBlockTest.cs" />
     <Compile Include="BlockHelper.cs" />
     <Compile Include="BlockTest.cs" />
+    <Compile Include="Block_RotateTest.cs" />
     <Compile Include="FieldTest.cs" />
     <Compile Include="Field_ColorAtTest.cs" />
     <Compile Include="Field_FixBlockTest.cs" />

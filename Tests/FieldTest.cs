@@ -78,8 +78,14 @@ namespace Tests
         [Test]
         public void Test_CanAdvance_WhenNotAtTheBottom_ReturnsTrue()
         {
+            int blockHeight = 3;
+            int fieldHeight = 10;
+
+            Mock<IBlock> block = new Mock<IBlock>();
+            block.Setup(b => b.Height).Returns(blockHeight);
+
             Field subject = new Field(10, 10);
-            subject.SetBlock(UNUSED_BLOCK, new Vector2(2, 3));
+            subject.SetBlock(block.Object, new Vector2(2, fieldHeight - blockHeight - 1));
 
             Assert.IsTrue(subject.CanAdvance());
         }
@@ -87,8 +93,14 @@ namespace Tests
         [Test]
         public void Test_CanAdvance_WhenAtBottom_ReturnsFalse()
         {
+            int blockHeight = 3;
+            int fieldHeight = 10;
+
+            Mock<IBlock> block = new Mock<IBlock>();
+            block.Setup(b => b.Height).Returns(blockHeight);
+
             Field subject = new Field(10, 10);
-            subject.SetBlock(UNUSED_BLOCK, new Vector2(3, 9));
+            subject.SetBlock(block.Object, new Vector2(3, fieldHeight - blockHeight));
 
             Assert.IsFalse(subject.CanAdvance());
         }

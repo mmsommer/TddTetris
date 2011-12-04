@@ -93,7 +93,7 @@ namespace TddTetris
 
         public bool CanAdvance()
         {
-            return Position.Y < Height - 1;
+            return (Position.Y + Block.Height) < Height;
         }
 
         public void FixBlock()

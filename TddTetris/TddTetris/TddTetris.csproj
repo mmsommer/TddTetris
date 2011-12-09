@@ -114,7 +114,7 @@
     <Compile Include="GameMechanics.cs" />
     <Compile Include="IBlockFactory.cs" />
     <Compile Include="IField.cs" />
-    <Compile Include="InputQueue.cs" />
+    <Compile Include="InputFilter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Game1.cs" />

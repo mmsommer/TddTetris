@@ -25,7 +25,7 @@ namespace TddTetris
 
         private int numberOfRows;
         private Field field;
-        private InputQueue inputQueue;
+        private InputFilter inputFilter;
         private GameMechanics gameMechanics;
 
         public Game1()
@@ -47,7 +47,7 @@ namespace TddTetris
             base.Initialize();
 
             lastUpdateTime = DateTime.Now;
-            inputQueue = new InputQueue();
+            inputFilter = new InputFilter();
         }
 
         /// <summary>
@@ -89,9 +89,9 @@ namespace TddTetris
         protected override void Update(GameTime gameTime)
         {
             KeyboardState keyState = Keyboard.GetState();
-            var pressedKeys = keyState.GetPressedKeys().ToList<Keys>();
+            var pressedKeys = keyState.GetPressedKeys().ToArray();
 
-            List<Keys> newlyPressedKeys = inputQueue.keyPress(pressedKeys);
+            var newlyPressedKeys = inputFilter.Filter(pressedKeys).ToList();
             bool shouldAdvance = (DateTime.Now - lastUpdateTime).TotalMilliseconds > 500;
 
             // Allows the game to exit

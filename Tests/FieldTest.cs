@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using Microsoft.Xna.Framework;
 using NUnit.Framework;
 using TddTetris;
-using Microsoft.Xna.Framework;
-using Moq;
 
 namespace Tests
 {
@@ -64,30 +59,63 @@ namespace Tests
         {
             Field subject = new Field(2, 2);
 
-            subject.SetContentsForTest( new Color?[,] {
+            subject.SetContentsForTest(new Color?[,] {
                 { Color.Red, null },
-                { null, Color.Blue } });
+                { null, Color.Blue } 
+            });
 
-            Assert.AreEqual(Color.Red, subject.ColorAt(new Vector2(0, 0) ));
-            Assert.AreEqual(Color.Blue, subject.ColorAt(new Vector2(1, 1) ));
-            Assert.IsNull(subject.ColorAt(new Vector2(0, 1) ));
-            Assert.IsNull(subject.ColorAt(new Vector2(1, 0) ));
+            Assert.AreEqual(Color.Red, subject.ColorAt(new Vector2(0, 0)));
+            Assert.AreEqual(Color.Blue, subject.ColorAt(new Vector2(1, 1)));
+            Assert.IsNull(subject.ColorAt(new Vector2(0, 1)));
+            Assert.IsNull(subject.ColorAt(new Vector2(1, 0)));
         }
 
-        #region Temporary tests until real behaviour is implemented
+        [Test]
+        public void Test_CanMoveLeft_WhenNotAtTheLeftEdge_ReturnsTrue()
+        {
+            Field subject = new Field(10, 10);
+            subject.SetBlock(new BlockHelper.MockBlock(2, 1), new Vector2(1, 5));
+
+            Assert.That(subject.CanMoveLeft(), Is.True);
+        }
+
+        [Test]
+        public void Test_CanMoveLeft_WhenAtTheLeftEdge_ReturnsFalse()
+        {
+            Field subject = new Field(10, 10);
+            subject.SetBlock(new BlockHelper.MockBlock(2, 1), new Vector2(0, 5));
+
+            Assert.That(subject.CanMoveLeft(), Is.False);
+        }
+
+        [Test]
+        public void Test_CanMoveRight_WhenNotAtTheRightEdge_ReturnsTrue()
+        {
+            Field subject = new Field(10, 10);
+            subject.SetBlock(new BlockHelper.MockBlock(2, 1), new Vector2(7, 5));
+
+            Assert.That(subject.CanMoveRight(), Is.True);
+        }
+
+        [Test]
+        public void Test_CanMoveRight_WhenAtTheRightdge_ReturnsFalse()
+        {
+            Field subject = new Field(10, 10);
+            subject.SetBlock(new BlockHelper.MockBlock(2, 1), new Vector2(8, 5));
+
+            Assert.That(subject.CanMoveRight(), Is.False);
+        }
+
         [Test]
         public void Test_CanAdvance_WhenNotAtTheBottom_ReturnsTrue()
         {
             int blockHeight = 3;
             int fieldHeight = 10;
 
-            Mock<IBlock> block = new Mock<IBlock>();
-            block.Setup(b => b.Height).Returns(blockHeight);
-
             Field subject = new Field(10, 10);
-            subject.SetBlock(block.Object, new Vector2(2, fieldHeight - blockHeight - 1));
+            subject.SetBlock(new BlockHelper.MockBlock(1, blockHeight), new Vector2(2, fieldHeight - blockHeight - 1));
 
-            Assert.IsTrue(subject.CanAdvance());
+            Assert.That(subject.CanAdvance(), Is.True);
         }
 
         [Test]
@@ -96,51 +124,10 @@ namespace Tests
             int blockHeight = 3;
             int fieldHeight = 10;
 
-            Mock<IBlock> block = new Mock<IBlock>();
-            block.Setup(b => b.Height).Returns(blockHeight);
-
             Field subject = new Field(10, 10);
-            subject.SetBlock(block.Object, new Vector2(3, fieldHeight - blockHeight));
+            subject.SetBlock(new BlockHelper.MockBlock(1, blockHeight), new Vector2(3, fieldHeight - blockHeight));
 
-            Assert.IsFalse(subject.CanAdvance());
+            Assert.That(subject.CanAdvance(), Is.False);
         }
-
-        [Test]
-        public void Test_CanMoveLeft_WhenNotAtTheLeftEdge_ReturnsTrue()
-        {
-            Field subject = new Field(10, 10);
-            subject.SetBlock(UNUSED_BLOCK, new Vector2(1, 5));
-
-            Assert.IsTrue(subject.CanMoveLeft());
-        }
-
-        [Test]
-        public void Test_CanMoveLeft_WhenAtTheLeftEdge_ReturnsFalse()
-        {
-            Field subject = new Field(10, 10);
-            subject.SetBlock(UNUSED_BLOCK, new Vector2(0, 5));
-
-            Assert.IsFalse(subject.CanMoveLeft());
-        }
-
-        [Test]
-        public void Test_CanMoveRight_WhenNotAtTheRightEdge_ReturnsTrue()
-        {
-            Field subject = new Field(10, 10);
-            subject.SetBlock(UNUSED_BLOCK, new Vector2(8, 5));
-
-            Assert.IsTrue(subject.CanMoveRight());
-        }
-
-        [Test]
-        public void Test_CanMoveRight_WhenAtTheRightdge_ReturnsFalse()
-        {
-            Field subject = new Field(10, 10);
-            subject.SetBlock(UNUSED_BLOCK, new Vector2(9, 5));
-
-            Assert.IsFalse(subject.CanMoveRight());
-        }
-
-        #endregion
     }
 }

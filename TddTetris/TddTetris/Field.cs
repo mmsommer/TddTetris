@@ -1,19 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Microsoft.Xna.Framework;
 
 namespace TddTetris
 {
     public class Field : IField
     {
-        private Color?[,] field;
+        private Color?[,] _field;
 
         public int Width { get; private set; }
+
         public int Height { get; private set; }
 
         public IBlock Block { get; private set; }
+
         public Vector2 Position { get; private set; }
 
         public Field(int width, int height)
@@ -21,7 +20,7 @@ namespace TddTetris
             this.Width = width;
             this.Height = height;
 
-            this.field = new Color?[width, height];
+            this._field = new Color?[width, height];
         }
 
         public Color? ColorAt(Vector2 position)
@@ -56,7 +55,7 @@ namespace TddTetris
             }
             else
             {
-                return field[x, y];
+                return _field[x, y];
             }
         }
 
@@ -83,7 +82,7 @@ namespace TddTetris
 
         public bool CanMoveRight()
         {
-            return Position.X < Width - 1;
+            return (Position.X + Block.Width) < Width;
         }
 
         public void MoveBlockRight()
@@ -106,7 +105,7 @@ namespace TddTetris
 
                     if (color.HasValue)
                     {
-                        field[(int)Position.X + x, (int)Position.Y + y] = color;
+                        _field[(int)Position.X + x, (int)Position.Y + y] = color;
                     }
                 }
             }
@@ -118,7 +117,7 @@ namespace TddTetris
          */
         public void SetContentsForTest(Color?[,] field)
         {
-            this.field = field;
+            this._field = field;
         }
     }
 }

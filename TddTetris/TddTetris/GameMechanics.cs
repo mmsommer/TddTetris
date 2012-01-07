@@ -1,17 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Collections;
-using Microsoft.Xna.Framework.Input;
+﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
 
 namespace TddTetris
 {
     public class GameMechanics
     {
         private readonly IField field;
+
         private readonly IBlockFactory blockFactory;
+
         private IBlock block;
 
         public GameMechanics(IField field, IBlockFactory blockFactory)

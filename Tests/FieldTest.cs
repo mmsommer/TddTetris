@@ -129,5 +129,29 @@ namespace Tests
 
             Assert.That(subject.CanAdvance(), Is.False);
         }
+
+        [Test]
+        public void Test_CanAdvance_WhenNotAtTheBottomButBlockInWay_ReturnsFalse()
+        {
+            int blockHeight = 3;
+            int fieldHeight = 10;
+
+            Field subject = new Field(10, 10);
+            subject.SetBlock(new BlockHelper.MockBlock(1, blockHeight), new Vector2(2, fieldHeight - blockHeight - 1));
+            subject.SetContentsForTest(new Color?[,]{
+                {null,null,null,null,null,null,null,null,null,null},
+                {null,null,null,null,null,null,null,null,null,null},
+                {null,null,null,null,null,null,null,null,null,Color.Red},
+                {null,null,null,null,null,null,null,null,null,null},
+                {null,null,null,null,null,null,null,null,null,null},
+                {null,null,null,null,null,null,null,null,null,null},
+                {null,null,null,null,null,null,null,null,null,null},
+                {null,null,null,null,null,null,null,null,null,null},
+                {null,null,null,null,null,null,null,null,null,null},
+                {null,null,null,null,null,null,null,null,null,null}
+            });
+
+            Assert.That(subject.CanAdvance(), Is.False);
+        }
     }
 }

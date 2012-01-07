@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using TddTetris;
 using Microsoft.Xna.Framework;
+using TddTetris;
 
 namespace Tests
 {
@@ -44,7 +41,16 @@ namespace Tests
 
             public Color? ColorAt(Vector2 position)
             {
-                throw new NotImplementedException();
+                var x = Convert.ToInt32(Math.Round(position.X));
+                var y = Convert.ToInt32(Math.Round(position.Y));
+                if (this.Width >= x && this.Height >= x)
+                {
+                    return Color.Red;
+                }
+                else
+                {
+                    return null;
+                }
             }
         }
     }

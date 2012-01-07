@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 
 namespace TddTetris
@@ -92,7 +93,8 @@ namespace TddTetris
 
         public bool CanAdvance()
         {
-            return (Position.Y + Block.Height) < Height;
+            var futurePosition = Position + new Vector2(0, 1);
+            return IsFuturePositionPossible(futurePosition);
         }
 
         public void FixBlock()
@@ -109,6 +111,43 @@ namespace TddTetris
                     }
                 }
             }
+        }
+
+        private bool IsFuturePositionPossible(Vector2 futurePosition)
+        {
+            var positionsToCheckInBlock = new List<Vector2>();
+            for (int x = 0; x < Block.Width; x++)
+            {
+                for (var y = 0; y < Block.Height; y++)
+                {
+                    var position = new Vector2(x, y);
+                    if (Block.ColorAt(position) != null)
+                    {
+                        positionsToCheckInBlock.Add(position + futurePosition);
+                    }
+                }
+            }
+
+            foreach (var position in positionsToCheckInBlock)
+            {
+                int x = Convert.ToInt32(Math.Round(position.X));
+                int y = Convert.ToInt32(Math.Round(position.Y));
+                try
+                {
+                    if (_field[x, y] != null)
+                    {
+                        return false;
+                    }
+                }
+                catch (IndexOutOfRangeException)
+                {
+                    // appearantly the block is out of the field so
+                    return false;
+                }
+            }
+
+            // no collitions found if we come here so
+            return true;
         }
 
         /* This is a helper method so we don't have to fix / remove blocks every time we

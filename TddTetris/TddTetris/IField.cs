@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 
 namespace TddTetris
 {
@@ -23,5 +19,7 @@ namespace TddTetris
 
         void SetBlock(IBlock block, Vector2 position);
         void FixBlock();
+
+        bool CanRotateRight();
     }
 }

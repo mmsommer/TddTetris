@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using NUnit.Framework;
-using TddTetris;
+﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework;
-using System.Collections;
 using Microsoft.Xna.Framework.Input;
 using Moq;
+using NUnit.Framework;
+using TddTetris;
 
 namespace Tests
 {
@@ -32,9 +28,9 @@ namespace Tests
         public void Test_HandleInput_WhenNoKeysArePressed()
         {
             List<Keys> input = new List<Keys>();
-            subject.HandleInput( input );
+            subject.HandleInput(input);
 
-            Assert.AreEqual( position, field.Position );
+            Assert.AreEqual(position, field.Position);
         }
 
         [Test]
@@ -85,7 +81,7 @@ namespace Tests
             List<Keys> input = new List<Keys> { Keys.Up };
 
             currentSubject.HandleInput(input);
-            currentBlock.Verify(b => b.RotateRight());
+            field.Verify(x => x.CanRotateRight());
         }
     }
 }

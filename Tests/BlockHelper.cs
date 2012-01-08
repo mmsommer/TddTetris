@@ -31,12 +31,21 @@ namespace Tests
 
             public void RotateLeft()
             {
-                throw new NotImplementedException();
+                Rotate();
+            }
+
+            private void Rotate()
+            {
+
+                var width = this.Height;
+                var height = this.Width;
+                this.Width = width;
+                this.Height = height;
             }
 
             public void RotateRight()
             {
-                throw new NotImplementedException();
+                Rotate();
             }
 
             public Color? ColorAt(Vector2 position)

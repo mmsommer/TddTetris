@@ -153,5 +153,37 @@ namespace Tests
 
             Assert.That(subject.CanAdvance(), Is.False);
         }
+
+        [Test]
+        public void Test_CanRotateRight_RightSideFreeToRotate_ReturnsTrue()
+        {
+            int blockHeight = 2;
+
+            Field subject = new Field(3, 3);
+            subject.SetBlock(new BlockHelper.MockBlock(1, blockHeight), new Vector2(2, 0));
+            subject.SetContentsForTest(new Color?[,]{
+                {null,null,null},
+                {null,null,null},
+                {null,null,null}
+            });
+
+            Assert.That(subject.CanRotateRight(), Is.False);
+        }
+
+        [Test]
+        public void Test_CanRotateRight_RightSideNotFreeToRotate_ReturnsFalse()
+        {
+            int blockHeight = 2;
+
+            Field subject = new Field(3, 3);
+            subject.SetBlock(new BlockHelper.MockBlock(1, blockHeight), new Vector2(1, 0));
+            subject.SetContentsForTest(new Color?[,]{
+                {null,null,null},
+                {null,null,null},
+                {null,null,null}
+            });
+
+            Assert.That(subject.CanRotateRight(), Is.True);
+        }
     }
 }

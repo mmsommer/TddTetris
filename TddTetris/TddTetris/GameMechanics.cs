@@ -37,6 +37,14 @@ namespace TddTetris
 
             if (input.IndexOf(Keys.Up) > -1)
             {
+                RotateRightIfPossible();
+            }
+        }
+
+        private void RotateRightIfPossible()
+        {
+            if (field.CanRotateRight())
+            {
                 block.RotateRight();
             }
         }

@@ -69,7 +69,7 @@
     <Compile Include="GameMechanics_NextBlock.cs" />
     <Compile Include="InputFilterTest.cs" />
     <Compile Include="TestRunner.cs" />
-    <Compile Include="FieldHelperTest.cs" />
+    <Compile Include="OverlapCheckerTest.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -4,9 +4,9 @@ using Microsoft.Xna.Framework;
 
 namespace TddTetris
 {
-    public class FieldHelper
+    public class OverlapChecker
     {
-        public bool IsPositionBlocked(Vector2 position, Color?[,] field)
+        public bool CheckPosition(Vector2 position, Color?[,] field)
         {
             int x = Convert.ToInt32(Math.Round(position.X));
             int y = Convert.ToInt32(Math.Round(position.Y));
@@ -14,23 +14,18 @@ namespace TddTetris
             return field[x, y] != null;
         }
 
-        public bool IsPositionOutOfField(Vector2 position, Color?[,] field)
+        public bool CheckFieldBoundaries(Vector2 position, Color?[,] field)
         {
             int x = Convert.ToInt32(Math.Round(position.X));
             int y = Convert.ToInt32(Math.Round(position.Y));
 
-            try
-            {
-                var result = field[x, y];
-            }
-            catch (IndexOutOfRangeException)
-            {
-                return true;
-            }
-            return false;
+            return x < 0 ||
+                y < 0 ||
+                x >= field.GetLength(0) ||
+                y >= field.GetLength(1);
         }
 
-        public bool IsFutureBlockPositionPossible(IBlock block, Vector2 futurePosition, Color?[,] field)
+        public virtual bool Check(IBlock block, Vector2 futurePosition, Color?[,] field)
         {
             var positionsToCheckInBlock = new List<Vector2>();
             for (int x = 0; x < block.Width; x++)
@@ -47,11 +42,11 @@ namespace TddTetris
 
             foreach (var position in positionsToCheckInBlock)
             {
-                if (IsPositionOutOfField(position, field))
+                if (CheckFieldBoundaries(position, field))
                 {
                     return false;
                 }
-                if (IsPositionBlocked(position, field))
+                if (CheckPosition(position, field))
                 {
                     return false;
                 }

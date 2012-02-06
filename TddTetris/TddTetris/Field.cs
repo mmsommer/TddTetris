@@ -21,15 +21,15 @@ namespace TddTetris
 
         public Vector2 Position { get; private set; }
 
-        public FieldHelper Helper { get; private set; }
+        public OverlapChecker OverlapChecker { get; private set; }
 
-        public Field(int width, int height, FieldHelper helper = null)
+        public Field(int width, int height, OverlapChecker overlapChecker = null)
         {
             this.Width = width;
             this.Height = height;
 
             this._field = new Color?[width, height];
-            this.Helper = helper ?? new FieldHelper();
+            this.OverlapChecker = overlapChecker ?? new OverlapChecker();
         }
 
         public Color? ColorAt(Vector2 position)
@@ -37,7 +37,7 @@ namespace TddTetris
             int x = (int)position.X;
             int y = (int)position.Y;
 
-            if (Helper.IsPositionOutOfField(position, _field))
+            if (OverlapChecker.CheckFieldBoundaries(position, _field))
             {
                 throw new IndexOutOfRangeException();
             }
@@ -53,7 +53,10 @@ namespace TddTetris
 
         public void AdvanceBlock()
         {
-            Position = Position + _stepDown;
+            if (CanAdvance())
+            {
+                Position = Position + _stepDown;
+            }
         }
 
         public bool CanMoveLeft()
@@ -63,7 +66,10 @@ namespace TddTetris
 
         public void MoveBlockLeft()
         {
-            Position = Position + _stepLeft;
+            if (CanMoveLeft())
+            {
+                Position = Position + _stepLeft;
+            }
         }
 
         public bool CanMoveRight()
@@ -73,7 +79,10 @@ namespace TddTetris
 
         public void MoveBlockRight()
         {
-            Position = Position + _stepRight;
+            if (CanMoveRight())
+            {
+                Position = Position + _stepRight;
+            }
         }
 
         public bool CanAdvance()
@@ -84,7 +93,7 @@ namespace TddTetris
         public bool CanRotateRight()
         {
             Block.RotateRight();
-            var canRotate = Helper.IsFutureBlockPositionPossible(Block, Position, _field);
+            var canRotate = OverlapChecker.Check(Block, Position, _field);
             Block.RotateLeft();
 
             return canRotate;
@@ -117,7 +126,7 @@ namespace TddTetris
 
         private bool CheckNewPosition(Vector2 newPosition)
         {
-            return Helper.IsFutureBlockPositionPossible(Block, newPosition, _field);
+            return OverlapChecker.Check(Block, newPosition, _field);
         }
 
         private Color? GetColorInBlock(Vector2 position)

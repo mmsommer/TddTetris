@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Moq;
 using NUnit.Framework;
 using TddTetris;
 
@@ -25,7 +26,12 @@ namespace Tests
         [Test]
         public void Test_AdvanceBlock()
         {
-            Field subject = new Field(10, 10);
+            var overlapCheckerStub = new Mock<OverlapChecker>();
+            overlapCheckerStub
+                .Setup(x => x.Check(It.IsAny<IBlock>(), It.IsAny<Vector2>(), It.IsAny<Color?[,]>()))
+                .Returns(() => true);
+
+            Field subject = new Field(10, 10, overlapCheckerStub.Object);
 
             subject.SetBlock(UNUSED_BLOCK, new Vector2(3, 4));
 
@@ -37,7 +43,12 @@ namespace Tests
         [Test]
         public void Test_MoveLeft()
         {
-            Field subject = new Field(10, 10);
+            var overlapCheckerStub = new Mock<OverlapChecker>();
+            overlapCheckerStub
+                .Setup(x => x.Check(It.IsAny<IBlock>(), It.IsAny<Vector2>(), It.IsAny<Color?[,]>()))
+                .Returns(() => true);
+
+            Field subject = new Field(10, 10, overlapCheckerStub.Object);
             subject.SetBlock(UNUSED_BLOCK, new Vector2(3, 4));
             subject.MoveBlockLeft();
 
@@ -47,7 +58,12 @@ namespace Tests
         [Test]
         public void Test_MoveRight()
         {
-            Field subject = new Field(10, 10);
+            var overlapCheckerStub = new Mock<OverlapChecker>();
+            overlapCheckerStub
+                .Setup(x => x.Check(It.IsAny<IBlock>(), It.IsAny<Vector2>(), It.IsAny<Color?[,]>()))
+                .Returns(() => true);
+
+            Field subject = new Field(10, 10, overlapCheckerStub.Object);
             subject.SetBlock(new BlockHelper.MockBlock(), new Vector2(3, 4));
             subject.MoveBlockRight();
 
@@ -69,6 +85,8 @@ namespace Tests
             Assert.IsNull(subject.ColorAt(new Vector2(0, 1)));
             Assert.IsNull(subject.ColorAt(new Vector2(1, 0)));
         }
+
+        #region komen eigenlijk te vervallen, want wordt nu afgehandeld door de overlapchecker class
 
         [Test]
         public void Test_CanMoveLeft_WhenNotAtTheLeftEdge_ReturnsTrue()
@@ -182,6 +200,284 @@ namespace Tests
                 {null,null,null},
                 {null,null,null}
             });
+
+            Assert.That(subject.CanRotateRight(), Is.True);
+        }
+        #endregion
+
+        [Test]
+        public void Test_AdvanceBlock_VerifyOverlapCheckerIsCalled()
+        {
+            var overlapCheckerMock = new Mock<OverlapChecker>();
+            overlapCheckerMock
+                .Setup(x => x.Check(It.IsAny<IBlock>(), It.IsAny<Vector2>(), It.IsAny<Color?[,]>()))
+                .Returns(() => true);
+
+            var subject = new Field(10, 10, overlapCheckerMock.Object);
+            subject.SetBlock(UNUSED_BLOCK, new Vector2(3, 4));
+
+            subject.AdvanceBlock();
+
+            overlapCheckerMock.Verify(x => x.Check(It.IsAny<IBlock>(), It.IsAny<Vector2>(), It.IsAny<Color?[,]>()));
+        }
+
+        [Test]
+        public void Test_AdvanceBlock_OverlapCheckerReturnsFalse_BlockDidNotMove()
+        {
+            var overlapCheckerMock = new Mock<OverlapChecker>();
+            overlapCheckerMock
+                .Setup(x => x.Check(It.IsAny<IBlock>(), It.IsAny<Vector2>(), It.IsAny<Color?[,]>()))
+                .Returns(() => false);
+
+            Field subject = new Field(10, 10, overlapCheckerMock.Object);
+
+            subject.SetBlock(UNUSED_BLOCK, new Vector2(3, 4));
+
+            subject.AdvanceBlock();
+
+            Assert.AreEqual(new Vector2(3, 4), subject.Position);
+        }
+
+        [Test]
+        public void Test_MoveLeft_VerifyOverlapCheckerIsCalled()
+        {
+            var overlapCheckerMock = new Mock<OverlapChecker>();
+            overlapCheckerMock
+                .Setup(x => x.Check(It.IsAny<IBlock>(), It.IsAny<Vector2>(), It.IsAny<Color?[,]>()))
+                .Returns(() => true);
+
+            var subject = new Field(10, 10, overlapCheckerMock.Object);
+            subject.SetBlock(UNUSED_BLOCK, new Vector2(3, 4));
+
+            subject.MoveBlockLeft();
+
+            overlapCheckerMock.Verify(x => x.Check(It.IsAny<IBlock>(), It.IsAny<Vector2>(), It.IsAny<Color?[,]>()));
+        }
+
+        [Test]
+        public void Test_MoveLeft_OverlapCheckerReturnsFalse_BlockDidNotMove()
+        {
+            var overlapCheckerMock = new Mock<OverlapChecker>();
+            overlapCheckerMock
+                .Setup(x => x.Check(It.IsAny<IBlock>(), It.IsAny<Vector2>(), It.IsAny<Color?[,]>()))
+                .Returns(() => false);
+
+            Field subject = new Field(10, 10, overlapCheckerMock.Object);
+            subject.SetBlock(UNUSED_BLOCK, new Vector2(3, 4));
+            subject.MoveBlockLeft();
+
+            Assert.AreEqual(new Vector2(3, 4), subject.Position);
+        }
+
+        [Test]
+        public void Test_MoveRight_VerifyOverlapCheckerIsCalled()
+        {
+            var overlapCheckerMock = new Mock<OverlapChecker>();
+            overlapCheckerMock
+                .Setup(x => x.Check(It.IsAny<IBlock>(), It.IsAny<Vector2>(), It.IsAny<Color?[,]>()))
+                .Returns(() => true);
+
+            var subject = new Field(10, 10, overlapCheckerMock.Object);
+            subject.SetBlock(UNUSED_BLOCK, new Vector2(3, 4));
+
+            subject.MoveBlockRight();
+
+            overlapCheckerMock.Verify(x => x.Check(It.IsAny<IBlock>(), It.IsAny<Vector2>(), It.IsAny<Color?[,]>()));
+        }
+
+        [Test]
+        public void Test_MoveRight_OverlapCheckerReturnsFalse_BlockDidNotMove()
+        {
+            var overlapCheckerStub = new Mock<OverlapChecker>();
+            overlapCheckerStub
+                .Setup(x => x.Check(It.IsAny<IBlock>(), It.IsAny<Vector2>(), It.IsAny<Color?[,]>()))
+                .Returns(() => false);
+
+            Field subject = new Field(10, 10, overlapCheckerStub.Object);
+            subject.SetBlock(new BlockHelper.MockBlock(), new Vector2(3, 4));
+            subject.MoveBlockRight();
+
+            Assert.AreEqual(new Vector2(3, 4), subject.Position);
+        }
+
+        [Test]
+        public void Test_CanMoveLeft_VerifyOverlapCheckerIsCalled()
+        {
+            var overlapCheckerMock = new Mock<OverlapChecker>();
+            overlapCheckerMock
+                .Setup(x => x.Check(It.IsAny<IBlock>(), It.IsAny<Vector2>(), It.IsAny<Color?[,]>()))
+                .Returns(() => true);
+
+            Field subject = new Field(10, 10, overlapCheckerMock.Object);
+            subject.SetBlock(new BlockHelper.MockBlock(2, 1), new Vector2(1, 5));
+
+            subject.CanMoveLeft();
+
+            overlapCheckerMock.Verify(x => x.Check(It.IsAny<IBlock>(), It.IsAny<Vector2>(), It.IsAny<Color?[,]>()));
+        }
+
+        [Test]
+        public void Test_CanMoveLeft_OverlapCheckerReturnsTrue_ReturnsTrue()
+        {
+            var overlapCheckerMock = new Mock<OverlapChecker>();
+            overlapCheckerMock
+                .Setup(x => x.Check(It.IsAny<IBlock>(), It.IsAny<Vector2>(), It.IsAny<Color?[,]>()))
+                .Returns(() => true);
+
+            Field subject = new Field(10, 10, overlapCheckerMock.Object);
+            subject.SetBlock(new BlockHelper.MockBlock(2, 1), new Vector2(1, 5));
+
+            Assert.That(subject.CanMoveLeft(), Is.True);
+        }
+
+        [Test]
+        public void Test_CanMoveLeft_OverlapCheckerReturnsFalse_ReturnsFalse()
+        {
+            var overlapCheckerMock = new Mock<OverlapChecker>();
+            overlapCheckerMock
+                .Setup(x => x.Check(It.IsAny<IBlock>(), It.IsAny<Vector2>(), It.IsAny<Color?[,]>()))
+                .Returns(() => false);
+
+            Field subject = new Field(10, 10, overlapCheckerMock.Object);
+            subject.SetBlock(new BlockHelper.MockBlock(2, 1), new Vector2(1, 5));
+
+            Assert.That(subject.CanMoveLeft(), Is.False);
+        }
+
+        [Test]
+        public void Test_CanMoveRight_VerifyOverlapCheckerIsCalled()
+        {
+            var overlapCheckerMock = new Mock<OverlapChecker>();
+            overlapCheckerMock
+                .Setup(x => x.Check(It.IsAny<IBlock>(), It.IsAny<Vector2>(), It.IsAny<Color?[,]>()))
+                .Returns(() => true);
+
+            Field subject = new Field(10, 10, overlapCheckerMock.Object);
+            subject.SetBlock(new BlockHelper.MockBlock(2, 1), new Vector2(1, 5));
+
+            subject.CanMoveRight();
+
+            overlapCheckerMock.Verify(x => x.Check(It.IsAny<IBlock>(), It.IsAny<Vector2>(), It.IsAny<Color?[,]>()));
+        }
+
+        [Test]
+        public void Test_CanMoveRight_OverlapCheckerReturnsTrue_ReturnsTrue()
+        {
+            var overlapCheckerMock = new Mock<OverlapChecker>();
+            overlapCheckerMock
+                .Setup(x => x.Check(It.IsAny<IBlock>(), It.IsAny<Vector2>(), It.IsAny<Color?[,]>()))
+                .Returns(() => true);
+
+            Field subject = new Field(10, 10, overlapCheckerMock.Object);
+            subject.SetBlock(new BlockHelper.MockBlock(2, 1), new Vector2(1, 5));
+
+            Assert.That(subject.CanMoveRight(), Is.True);
+        }
+
+        [Test]
+        public void Test_CanMoveRight_OverlapCheckerReturnsFalse_ReturnsFalse()
+        {
+            var overlapCheckerMock = new Mock<OverlapChecker>();
+            overlapCheckerMock
+                .Setup(x => x.Check(It.IsAny<IBlock>(), It.IsAny<Vector2>(), It.IsAny<Color?[,]>()))
+                .Returns(() => false);
+
+            Field subject = new Field(10, 10, overlapCheckerMock.Object);
+            subject.SetBlock(new BlockHelper.MockBlock(2, 1), new Vector2(1, 5));
+
+            Assert.That(subject.CanMoveRight(), Is.False);
+        }
+
+        [Test]
+        public void Test_CanAdvance_VerifyOverlapCheckerIsCalled()
+        {
+            var overlapCheckerMock = new Mock<OverlapChecker>();
+            overlapCheckerMock
+                .Setup(x => x.Check(It.IsAny<IBlock>(), It.IsAny<Vector2>(), It.IsAny<Color?[,]>()))
+                .Returns(() => true);
+
+            Field subject = new Field(10, 10, overlapCheckerMock.Object);
+            subject.SetBlock(new BlockHelper.MockBlock(2, 1), new Vector2(1, 5));
+
+            subject.CanAdvance();
+
+            overlapCheckerMock.Verify(x => x.Check(It.IsAny<IBlock>(), It.IsAny<Vector2>(), It.IsAny<Color?[,]>()));
+        }
+
+        [Test]
+        public void Test_CanAdvance_OverlapCheckerReturnsTrue_ReturnsTrue()
+        {
+            var overlapCheckerMock = new Mock<OverlapChecker>();
+            overlapCheckerMock
+                .Setup(x => x.Check(It.IsAny<IBlock>(), It.IsAny<Vector2>(), It.IsAny<Color?[,]>()))
+                .Returns(() => true);
+
+            Field subject = new Field(10, 10, overlapCheckerMock.Object);
+            subject.SetBlock(new BlockHelper.MockBlock(2, 1), new Vector2(1, 5));
+
+            Assert.That(subject.CanAdvance(), Is.True);
+        }
+
+        [Test]
+        public void Test_CanAdvance_OverlapCheckerReturnsFalse_ReturnsFalse()
+        {
+            var overlapCheckerMock = new Mock<OverlapChecker>();
+            overlapCheckerMock
+                .Setup(x => x.Check(It.IsAny<IBlock>(), It.IsAny<Vector2>(), It.IsAny<Color?[,]>()))
+                .Returns(() => false);
+
+            Field subject = new Field(10, 10, overlapCheckerMock.Object);
+            subject.SetBlock(new BlockHelper.MockBlock(2, 1), new Vector2(1, 5));
+
+            Assert.That(subject.CanAdvance(), Is.False);
+        }
+
+        [Test]
+        public void Test_CanRotateRight_VerifyOverlapCheckerIsCalled()
+        {
+            var overlapCheckerMock = new Mock<OverlapChecker>();
+            overlapCheckerMock
+                .Setup(x => x.Check(It.IsAny<IBlock>(), It.IsAny<Vector2>(), It.IsAny<Color?[,]>()))
+                .Returns(() => true);
+
+            int blockHeight = 2;
+
+            Field subject = new Field(10, 10, overlapCheckerMock.Object);
+            subject.SetBlock(new BlockHelper.MockBlock(1, blockHeight), new Vector2(2, 0));
+
+            subject.CanRotateRight();
+
+            overlapCheckerMock.Verify(x => x.Check(It.IsAny<IBlock>(), It.IsAny<Vector2>(), It.IsAny<Color?[,]>()));
+        }
+
+        [Test]
+        public void Test_CanRotateRight_OverlapCheckerReturnsFalse_ReturnsFalse()
+        {
+            var overlapCheckerMock = new Mock<OverlapChecker>();
+            overlapCheckerMock
+                .Setup(x => x.Check(It.IsAny<IBlock>(), It.IsAny<Vector2>(), It.IsAny<Color?[,]>()))
+                .Returns(() => false);
+
+            int blockHeight = 2;
+
+            Field subject = new Field(10, 10, overlapCheckerMock.Object);
+            subject.SetBlock(new BlockHelper.MockBlock(1, blockHeight), new Vector2(2, 0));
+
+            Assert.That(subject.CanRotateRight(), Is.False);
+        }
+
+        [Test]
+        public void Test_CanRotateRight_OverlapCheckerReturnsTrue_ReturnsTrue()
+        {
+            var overlapCheckerMock = new Mock<OverlapChecker>();
+            overlapCheckerMock
+                .Setup(x => x.Check(It.IsAny<IBlock>(), It.IsAny<Vector2>(), It.IsAny<Color?[,]>()))
+                .Returns(() => true);
+
+            int blockHeight = 2;
+
+            Field subject = new Field(10, 10, overlapCheckerMock.Object);
+            subject.SetBlock(new BlockHelper.MockBlock(1, blockHeight), new Vector2(2, 0));
 
             Assert.That(subject.CanRotateRight(), Is.True);
         }
